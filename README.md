@@ -1,6 +1,6 @@
-# BASops
+# LBops
 
-LibreOffice Basic utility functions and subroutines. A translation of (VBAops)[https://github.com/robertschnitman/VBAops].
+Utility functions and subroutines for LibreOffice Basic/Calc. A translation of (XLops)[https://github.com/robertschnitman/XLops].
 
 # Modules
 
