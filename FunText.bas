@@ -1,4 +1,5 @@
 ' =====================================================================================
+' REPO: LBops
 ' MODULE: FunText.bas
 ' DESCRIPTION: Functions for parsing text.
 '
@@ -23,6 +24,7 @@
 ' RX()
 ' RXLIKE()
 ' RXREPLACE()
+' RXREMOVE()
 ' RXGET()
 ' =====================================================================================
 
@@ -462,6 +464,17 @@ Function RXREPLACE(cell as String, pattern as String, replacement as String)
 
 End Function
 ' =====================================================================================
+
+' ============================================================================
+' Function: RXREMOVE()
+' Description: Remove a string based on a regular expression pattern.
+
+Function RXREMOVE(cell as String, pattern as String,)
+
+	RXREMOVE = RXREPLACE(cell, pattern, "")
+
+End Function
+' ============================================================================
 
 ' =====================================================================================
 ' Function: RXGET()

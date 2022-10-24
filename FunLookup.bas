@@ -1,4 +1,5 @@
 '=====================================================================================
+' REPO: LBops
 ' MODULE: FunLookup.bas
 ' DESCRIPTION: Simplified lookup functions.
 '

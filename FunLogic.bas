@@ -1,9 +1,11 @@
 '=====================================================================================
+' REPO: LBops
 ' MODULE: FunLogic.bas
 ' DESCRIPTION: Boolean functions for common scenarios.
 '
 ' LIST OF FUNCTIONS:
 ' ISLEN0()
+' IS0()
 ' ISERROR()
 ' IFBLANK()
 ' SKIPBLANK()
@@ -20,6 +22,16 @@ Function ISLEN0(cell As String)
 
 End Function
 '=====================================================================================
+
+' ============================================================================
+' Function: IS0()
+' Description: Tests whether a cell is zero or a zero-length string.
+Function IS0(cell As String)
+    
+    IS0 = (Len(cell) = 0 or CInt(cell) = 0)
+
+End Function
+' ============================================================================
 
 '=====================================================================================
 ' Function: ISERROR()
