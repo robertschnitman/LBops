@@ -8,6 +8,7 @@
 ' IS0()
 ' ISERROR()
 ' IFBLANK()
+' IF0()
 ' SKIPBLANK()
 ' DOIF()
 '=====================================================================================
@@ -65,6 +66,27 @@ Function IFBLANK(cell As String, ValTrue, ValElse)
     IFBLANK = result
 
 End Function
+
+' ============================================================================
+' Function: IF0()
+' Description: Perform an action depending on whether a cell is zero or length zero.
+
+Function IF0(cell As String, ValTrue, ValElse)
+
+    If ISLEN0(cell) = True or CInt(cell) = 0 Then
+    
+        output = ValTrue
+        
+    Else
+    
+        output = ValElse
+        
+    End If
+    
+    IF0 = output
+
+End Function
+' ============================================================================
 
 '=====================================================================================
 ' Function: SKIPBLANK()

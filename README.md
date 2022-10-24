@@ -15,4 +15,6 @@ Utility functions and subroutines for LibreOffice Basic/Calc. A translation of [
 # Installation
 1. Save this repo to a desired directory.
 
-2. In LO Calc's Developer Mode (`ods` files), import the `.bas` scripts.
+1. In LO Calc's Developer Mode (`ods` files), import `LBops.bas` as a module.
+
+1. *(Optional)* As an alternative to the above step, you can import the individual modules in the *src* subfolder.

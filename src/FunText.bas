@@ -371,6 +371,78 @@ End Function
 ' =====================================================================================
 
 ' =====================================================================================
+' Function: TEXTREVERSE(), TEXTREV()
+' Description: Reverse the order of a string.
+
+Function TEXTREVERSE(cell As String)
+
+    TEXTREVERSE = StrReverse(cell) ' e.g. TEXTREVERSE("ABCD") = "DCBA"
+
+End Function
+
+' TEXTREVERSE() Synonym
+Function TEXTREV(cell As String)
+
+	TEXTREV = TEXTREVERSE(cell)
+	
+End Function
+' =====================================================================================
+
+' =====================================================================================
+' Function: TEXTCOMPARE()
+' Description: Compare two strings. Based on VBA's StrComp().
+
+Function TEXTCOMPARE(string1, string2, Optional CompareType As Long = 1, Optional value As Boolean = False)
+
+    ' By default, StrComp() outputs an integer.
+    comp = StrComp(string1, string2, CompareType)
+    
+    If value = False Then
+    
+        output = comp
+        
+    ' If we want the "translated" value of what the integer means, then output the equivalent string.
+    ElseIf value = True Then
+    
+        Select Case comp
+        
+            Case -1
+                
+                output = "<" ' string1 & " < " & string2
+                
+            Case 0
+            
+                output = "=" ' string1 & " = " & string2
+                
+            Case 1
+            
+                output = ">" ' string1 & " > " & string2
+                
+        End Select
+        
+    End If
+    
+    ' Output the desired value.
+    TEXTCOMPARE = output
+
+
+End Function
+' =====================================================================================
+
+' =====================================================================================
+' Function: TEXTJOINR()
+' Description: Join a range of strings into a single string, separated by an optional delimiter.
+
+Function TEXTJOINR(StringRange As Range, Optional delimiter As String)
+
+	fa = createUnoService("com.sun.star.sheet.FunctionAccess")	
+
+    TEXTJOINR = fa.callFunction("TEXTJOIN", Array(delimiter, True, StringRange))
+
+End Function
+' =====================================================================================
+
+' =====================================================================================
 ' Function: TRIML()
 ' Description: Trim leading spaces.
 
@@ -412,7 +484,7 @@ Function CTRIM(cell as String)
 
 End Function
 
-' Synonym
+' CTRIM() Synonym
 Function TRIMC(cell As String)
 
 	TRIMC = CTRIM(cell)
@@ -465,7 +537,7 @@ Function RXREPLACE(cell as String, pattern as String, replacement as String)
 End Function
 ' =====================================================================================
 
-' ============================================================================
+' =====================================================================================
 ' Function: RXREMOVE()
 ' Description: Remove a string based on a regular expression pattern.
 
@@ -474,7 +546,7 @@ Function RXREMOVE(cell as String, pattern as String,)
 	RXREMOVE = RXREPLACE(cell, pattern, "")
 
 End Function
-' ============================================================================
+' =====================================================================================
 
 ' =====================================================================================
 ' Function: RXGET()

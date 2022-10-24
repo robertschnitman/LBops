@@ -4,13 +4,13 @@
 ' DESCRIPTION: Simplified lookup functions.
 '
 ' LIST OF FUNCTIONS:
-' SMATCH()
+' SMATCH()/MATCHS()
 ' INDEXH()
 ' INDEXMATCH()/INDEXM
 '=====================================================================================
 
 '=====================================================================================
-' Function: SMATCH()
+' Function: SMATCH()/MATCHS()
 ' Description: Determine which cell in a range matches a given pattern.
 
 Function SMATCH(pattern As String, myrange As Range)
@@ -21,6 +21,14 @@ Function SMATCH(pattern As String, myrange As Range)
 	SMATCH = fa.callFunction("MATCH", Array(pattern, myrange, 0))
     
 End Function
+
+'SMATCH() Synonym
+Function MATCHS(pattern As String, myrange As Range)
+	
+	MATCHS = SMATCH(pattern, myrange)
+    
+End Function
+
 '=====================================================================================
 
 '=====================================================================================
@@ -56,7 +64,7 @@ Function INDEXMATCH(datarange, lookupval1, range1, lookupval2, range2)
 
 End Function
 
-'Synonym
+'INDEXMATCH() Synonym
 Function INDEXM(datarange, lookupval1, range1, lookupval2, range2)
 
 	INDEXM = INDEXMATCH(datarange, lookupval1, range1, lookupval2, range2)
