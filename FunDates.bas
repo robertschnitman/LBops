@@ -1,5 +1,6 @@
 '=====================================================================================
-' MODULE: FunDates.vb
+' REPO: LBops
+' MODULE: FunDates.bas
 ' DESCRIPTION: Functions for parsing dates.
 '
 ' LIST OF FUNCTIONS:
