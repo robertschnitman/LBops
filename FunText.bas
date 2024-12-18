@@ -26,6 +26,7 @@
 ' RXREPLACE()
 ' RXREMOVE()
 ' RXGET()
+' RXIF()
 ' =====================================================================================
 
 ' Function: FINDREPLACE()
@@ -392,14 +393,14 @@ End Function
 ' Function: TEXTCOMPARE()
 ' Description: Compare two strings. Based on VBA's StrComp().
 
-Function TEXTCOMPARE(string1, string2, Optional CompareType As Long = 1, Optional value As Boolean = False)
+Function TEXTCOMPARE(string1, string2, Optional CompareType, Optional value)
 
     ' By default, StrComp() outputs an integer.
-    comp = StrComp(string1, string2, CompareType)
+    comp = StrComp(string1, string2, CompareType)    
     
     If value = False Then
     
-        output = comp
+        Result = comp
         
     ' If we want the "translated" value of what the integer means, then output the equivalent string.
     ElseIf value = True Then
@@ -408,22 +409,22 @@ Function TEXTCOMPARE(string1, string2, Optional CompareType As Long = 1, Optiona
         
             Case -1
                 
-                output = "<" ' string1 & " < " & string2
+                Result = "<" ' string1 & " < " & string2
                 
             Case 0
             
-                output = "=" ' string1 & " = " & string2
+                Result = "=" ' string1 & " = " & string2
                 
             Case 1
             
-                output = ">" ' string1 & " > " & string2
+                Result = ">" ' string1 & " > " & string2
                 
         End Select
         
     End If
     
     ' Output the desired value.
-    TEXTCOMPARE = output
+    TEXTCOMPARE = Result
 
 
 End Function
@@ -435,7 +436,8 @@ End Function
 
 Function TEXTJOINR(StringRange As Range, Optional delimiter As String)
 
-	fa = createUnoService("com.sun.star.sheet.FunctionAccess")	
+	Dim fa as Object
+	Set fa = createUnoService("com.sun.star.sheet.FunctionAccess")	
 
     TEXTJOINR = fa.callFunction("TEXTJOIN", Array(delimiter, True, StringRange))
 
@@ -478,7 +480,8 @@ End Function
 ' Description: Trim and cleanup excessive whitespace.
 Function CTRIM(cell as String)
 
-	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
+	Dim fa as Object
+	Set fa = createUnoService("com.sun.star.sheet.FunctionAccess")	
 
 	CTRIM = fa.callFunction("CLEAN", Array(fa.callFunction("TRIM", Array(cell))))
 
@@ -494,12 +497,13 @@ End Function
 
 ' =====================================================================================
 ' Function: RX()
-' Description: REGEX() wrapper.
-Function RX(cell as String, pattern as String, Optional replacement as String, Optional flag as String)
+' Description: REGEX() wrapper (simplified).
+Function RX(cell as String, pattern as String)
 
-	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
+	Dim fa as Object
+	Set fa = createUnoService("com.sun.star.sheet.FunctionAccess")	
 	
-	RX = fa.callFunction("REGEX", Array(cell, pattern, replacement, flag))
+	RX = fa.callFunction("REGEX", Array(cell, pattern))
 
 End Function
 
@@ -508,21 +512,22 @@ End Function
 ' Description: Test whether a regular expression pattern has been met.
 Function RXLIKE(cell as String, pattern as String)
 
-	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
+	Dim fa as Object
+	Set fa = createUnoService("com.sun.star.sheet.FunctionAccess")	
 	
 	initial = RX(cell, pattern)
 	
-	if fa.callFunction("ISERR", Array(initial)) then
+	if Len(Initial)=0 then
 	
-		output = FALSE
+		Result = FALSE
 		
 	Else
 	
-		output = TRUE
+		Result = TRUE
 	
 	End If
 
-	RXLIKE = output
+	RXLIKE = Result
 
 End Function
 ' =====================================================================================
@@ -541,7 +546,7 @@ End Function
 ' Function: RXREMOVE()
 ' Description: Remove a string based on a regular expression pattern.
 
-Function RXREMOVE(cell as String, pattern as String,)
+Function RXREMOVE(cell as String, pattern as String)
 
 	RXREMOVE = RXREPLACE(cell, pattern, "")
 
@@ -554,6 +559,26 @@ End Function
 Function RXGET(cell as String, pattern as String)
 
 	RXGET = RX(cell, pattern)
+
+End Function
+' =====================================================================================
+
+' =====================================================================================
+' Function: RXIF()
+' Description: Execute expression if a regex matches or not.
+Function RXIF(cell as String, pattern as String, ValTrue, ValElse)
+
+	If RXLIKE(cell, pattern) then
+	
+		Result = ValTrue
+		
+	Else
+	
+		Result = ValElse
+
+	End If
+	
+	RXIF = Result
 
 End Function
 ' =====================================================================================

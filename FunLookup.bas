@@ -4,11 +4,28 @@
 ' DESCRIPTION: Simplified lookup functions.
 '
 ' LIST OF FUNCTIONS:
+' ---CallFuns---
+' INDEXC()
 ' XMATCH()
 ' VLOOKUPC()
-' SMATCH()/MATCHS()
+' ---Main---
+' FLOOKUP()
 ' INDEXH()
-' INDEXMATCH()/INDEXM
+' INDEXM()/INDEXMATCH()
+' SMATCH()
+'=====================================================================================
+
+'=====================================================================================
+' Function: INDEXC()
+' DESCRIPTION: Easier call to INDEX within Developer mode.
+
+Function INDEXC(DataRange as Range, RowNum as Integer, Optional ColNum as Integer)
+
+	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
+	
+	INDEXC = fa.callFunction("INDEX", Array(DataRange, RowNum, ColNum))
+
+End Function
 '=====================================================================================
 
 '=====================================================================================
@@ -36,7 +53,7 @@ End Function
 ' Function: VLOOKUPC()
 ' DESCRIPTION: Easier call to VLOOKUP within Developer mode.
 
-Function VLOOKUPC(IDLookup, DataRange, ColumnLookup, Optional ApproxMatch as Boolean)
+Function VLOOKUPC(IDLookup, DataRange, ColLookup, Optional ApproxMatch as Boolean)
 
 	If IsMissing(ApproxMatch) Then
 	
@@ -47,50 +64,33 @@ Function VLOOKUPC(IDLookup, DataRange, ColumnLookup, Optional ApproxMatch as Boo
 
 	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
 	
-	VLOOKUPC = fa.callFunction("VLOOKUP", Array(IDLookup, DataRange, ColumnLookup, ApproxMatch))
+	VLOOKUPC = fa.callFunction("VLOOKUP", Array(IDLookup, DataRange, ColLookup, ApproxMatch))
 
 End Function
 '=====================================================================================
 
 '=====================================================================================
-' Function: SMATCH()/MATCHS()
-' Description: Determine which cell in a range matches a given StringPattern.
-
-Function SMATCH(StringPattern As String, DataRange As Range, Optional MatchType)
-
-	If IsMissing(MatchType) Then
-	
-		MatchType = 0
-		
-	End If
-
-	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
-
-	' MATCH() StringPattern-matching in LibreOffice uses zero instead of 2 like in Excel.
-	SMATCH = fa.callFunction("MATCH", Array(StringPattern, DataRange, MatchType))
+' Function: FLOOKUP()
+' DESCRIPTION: "Flexible Lookup", a simpler Index-Match formula.
+Function FLOOKUP(IDLookup, DataRange as Variant, NamesPattern, NamesRange as Variant)
     
-End Function
-
-'SMATCH() Synonym
-Function MATCHS(StringPattern As String, DataRange As Range)
-	
-	MATCHS = SMATCH(StringPattern, DataRange)
+    ColNum = XMATCH(NamesPattern, NamesRange)
     
-End Function
+    FLOOKUP = VLOOKUPC(IDLookup, DataRange, ColNum, False)
 
+End Function
 '=====================================================================================
 
 '=====================================================================================
 ' FUNCTION: INDEXH()
 ' DESCRIPTION: Get Header value in range.
-Function INDEXH(dataref As range, dataheader As range, StringPattern As String)
-
-    fa = createUnoService("com.sun.star.sheet.FunctionAccess")
+Function INDEXH(DataRange As Range, DataHeader As Range, StringPattern As String)
 	
 	' Regular INDEX calculation with XMATCH
-	xm = SMATCH(StringPattern, dataheader)
-		
-	INDEXH = fa.callFunction("INDEX", Array(dataref, 1, xm))        
+	xm = XMATCH(StringPattern, DataHeader)		
+	
+	' Result
+	INDEXH = INDEXC(DataRange, 1, xm)
  
 End Function
 '=====================================================================================
@@ -99,22 +99,30 @@ End Function
 ' Function: INDEXMATCH()/INDEXM()
 ' Description: Simplification of index-matching [INDEX(..., MATCH(...), MATCH(...))].
 
-Function INDEXMATCH(datarange, lookupval1, range1, lookupval2, range2)
-
-	fa = createUnoService("com.sun.star.sheet.FunctionAccess")
+Function INDEXMATCH(DataRange, LookupVal1, MatchRange1, LookupVal2, MatchRange2)	
 	
-	r = SMATCH(lookupval1, range1)
+	RowNum = XMATCH(LookupVal1, MatchRange1)
 	
-	c = SMATCH(lookupval2, range2)
+	ColNum = XMATCH(LookupVal2, MatchRange2)
 	
-	INDEXMATCH = fa.callFunction("INDEX", Array(datarange, r, c))
+	INDEXMATCH = INDEXC(DataRange, RowNum, ColNum)
 
 End Function
 
 'INDEXMATCH() Synonym
-Function INDEXM(datarange, lookupval1, range1, lookupval2, range2)
+Function INDEXM(DataRange, LookupVal1, MatchRange1, LookupVal2, MatchRange2)
 
-	INDEXM = INDEXMATCH(datarange, lookupval1, range1, lookupval2, range2)
+	INDEXM = INDEXMATCH(DataRange, LookupVal1, MatchRange1, LookupVal2, MatchRange2)
 
+End Function
+'=====================================================================================
+
+'=====================================================================================
+' FUNCTION: SMATCH()
+' DESCRIPTION: Simplified XMATCH().
+Function SMATCH(StringPattern As String, DataRange As Range)
+	
+	SMATCH = XMATCH(StringPattern, DataRange, 0)
+    
 End Function
 '=====================================================================================
